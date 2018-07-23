@@ -10,3 +10,7 @@ RUN apk add --no-cache php7-pdo php7-sqlite3 php7-pdo_sqlite
 # Copy application files
 WORKDIR /var/www/html
 COPY app/ /var/www/html/
+
+# Install PHP dependencies
+RUN cd /var/www/html && php composer.phar update
+RUN rm /var/www/html/composer* # TODO: Improve...
