@@ -70,6 +70,10 @@ class Config
             'domain',
             'useSsl',
             'jwtKey'
+        ],
+        'log' => [
+            'file',
+            'level'
         ]
     ];
 
@@ -80,7 +84,10 @@ class Config
      */
     public function __construct()
     {
-        $this->config = Yaml::parseFile('../config/config.yaml');
+        $env = getenv('CONF_FILE');
+        $file = $env ? $env : '../config.yaml';
+
+        $this->config = Yaml::parseFile($file);
         $this->checkConfig();
     }
 

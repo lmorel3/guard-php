@@ -16,7 +16,9 @@ RUN sed -i 's|root /var/www/html;|root /var/www/public;|g' /etc/nginx/nginx.conf
 # Install PHP dependencies
 RUN if [ "$APP_ENV" != "dev" ]; then \
         cd /var/www/html \
-        php composer.phar install \
-        rm /var/www/html/composer* \
+        php bin/composer.phar install \
         ; \
     fi
+
+RUN mkdir -p /var/log/guard && \
+    chown -R nobody:nobody /var/log/guard
