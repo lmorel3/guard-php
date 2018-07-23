@@ -33,7 +33,7 @@ class User
         $isValid = true;
 
         try {
-            JWT::decode($token, Config::JWT_KEY, array('HS256'));
+            JWT::decode($token, Config::get('jwtKey'), array('HS256'));
         } catch (\Exception $e) {
             return false;
         };
@@ -64,7 +64,7 @@ class User
 
             $response = FigResponseCookies::set($response, SetCookie::create(self::TOKEN_KEY)
                 ->withValue($token)
-                ->withDomain(Config::DOMAIN)
+                ->withDomain(Config::get('domain'))
                 ->withPath('/')
             );
         }
@@ -107,7 +107,7 @@ class User
             'created_at'    => new \DateTime()
         );
 
-        return JWT::encode($token, Config::JWT_KEY);
+        return JWT::encode($token, Config::get('jwtKey'));
     }
 
 }

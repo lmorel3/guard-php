@@ -9,6 +9,9 @@ use Guard\Log;
 
 require '../vendor/autoload.php';
 
+error_log(print_r(shell_exec('whoami'), true));
+error_log(fileowner('/var/log/guard'));
+
 $app = new Slim\App();
 
 /**

@@ -58,7 +58,7 @@ class SsoRequest
     public function isAuth() {
         $parsed = parse_url($this->requestUrl);
 
-        return isset($parsed['host']) && $parsed['host'] === Config::AUTH_URL;
+        return isset($parsed['host']) && $parsed['host'] === Config::get('authUrl');
     }
 
     /**
@@ -96,7 +96,7 @@ class SsoRequest
         if($this->setCookie) {
             return FigResponseCookies::set($response, SetCookie::create('from_url')
                 ->withValue($this->requestUrl)
-                ->withDomain(Config::DOMAIN)
+                ->withDomain(Config::get('domain'))
                 ->withPath('/')
             );
         }

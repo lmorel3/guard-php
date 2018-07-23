@@ -43,7 +43,13 @@ class Log
 
         try {
             self::$logger = new Logger('guard');
-            self::$logger->pushHandler(new StreamHandler('php://stderr', Logger::DEBUG));
+
+            $wanted = Config::get('level', 'log');
+            $level = isset(Logger::getLevels()[$wanted]) ? Logger::getLevels()[$wanted] : Logger::DEBUG;
+
+            self::$logger->pushHandler(new StreamHandler(Config::get('file', 'log'), $level));
+
+            self::info("Loglevel: $level (wanted: $wanted)");
         } catch (Exception $e) {
             error_log("Unable to create logger");
             die();

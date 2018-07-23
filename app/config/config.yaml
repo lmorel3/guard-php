@@ -1,0 +1,22 @@
+app:
+
+  # Auth domain
+  authUrl: 'auth.guard.local'
+
+  # Define if user is being redirected to http or https login page
+  useSsl: false
+
+  # Auth domain's url
+  domain: 'guard.local'
+
+  # Private key used to generate and verify JWT tokens
+  # - Use a STRONG key and keep it secured
+  jwtKey: 'azerty'
+
+log:
+
+  # Log file (either a filepath or a stream such as 'php://stderr')
+  file: '/var/log/guard/guard.log'
+
+  # Log level (DEBUG, INFO, WARNING)
+  level: 'DEBUG'
