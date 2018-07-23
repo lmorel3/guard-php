@@ -28,9 +28,12 @@ services:
     build: ..
     environment:
       - APP_ENV=dev
+      - CONF_FILE=/config.yaml
     image: lmorel3/guard
     volumes:
       - ./config/database.sqlite:/database.sqlite
+      - ./config/config.yaml:/config.yaml
+      - ./logs/guard:/var/log/guard
     ports:
       - '8081:80'
     labels:

@@ -12,3 +12,11 @@ app:
   # Private key used to generate and verify JWT tokens
   # - Use a STRONG key and keep it secured
   jwtKey: 'azerty'
+
+log:
+
+  # Log file
+  file: '/var/log/guard/guard.log'
+
+  # Log level (DEBUG, INFO, WARNING)
+  level: 'DEBUG'

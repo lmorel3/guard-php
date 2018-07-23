@@ -20,3 +20,6 @@ RUN if [ "$APP_ENV" != "dev" ]; then \
         rm /var/www/html/composer* \
         ; \
     fi
+
+RUN mkdir -p /var/log/guard && \
+    chown -R nobody:nobody /var/log/guard
