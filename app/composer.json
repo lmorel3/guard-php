@@ -1,0 +1,21 @@
+{
+    "name": "lmorel3/sso",
+    "description": "Simple and lightweight SSO backend for Traefik",
+    "type": "project",
+    "require": {
+        "monolog/monolog": "^1.23",
+        "catfan/medoo": "^1.5",
+        "slim/slim": "^3.10",
+        "dflydev/fig-cookies": "^1.0",
+        "firebase/php-jwt": "^5.0"
+    },
+    "autoload": {
+        "psr-4": {"Sso\\": "src/"}
+    },
+    "authors": [
+        {
+            "name": "Laurent Morel",
+            "email": "contact@lmorel3.fr"
+        }
+    ]
+}

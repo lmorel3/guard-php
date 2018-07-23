@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+
+  traefik:
+    container_name: traefik
+    image: traefik
+    command: --api --docker
+    ports:
+      - '80:80'
+      - '8080:8080'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock #So that Traefik can listen to the Docker events
+      - ./config/traefik.toml:/etc/traefik/traefik.toml
+
+  whoami:
+    container_name: whoami
+    image: emilevauge/whoami
+    ports:
+      - '8082:80'
+    labels:
+      - "traefik.backend=whoami"
+      - "traefik.port=80"
+      - "traefik.frontend.rule=Host:guard.local"
+
+  sso:
+    container_name: guard
+    build: ..
+    image: lmorel3/guard
+    volumes:
+      - ./config/database.sqlite:/database.sqlite
+    ports:
+      - '8081:80'
+    labels:
+      - "traefik.backend=guard"
+      - "traefik.port=80"
+      - "traefik.frontend.rule=Host:auth.guard.local"
