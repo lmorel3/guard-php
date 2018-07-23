@@ -15,7 +15,7 @@ app:
 
 log:
 
-  # Log file (either a filepath or a stream such as 'php://stderr')
+  # Log file
   file: '/var/log/guard/guard.log'
 
   # Log level (DEBUG, INFO, WARNING)
