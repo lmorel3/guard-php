@@ -1,7 +1,7 @@
 {
     "name": "lmorel3/sso",
     "version": "0.1-RC1",
-    "description": "Simple and lightweight SSO backend for Traefik",
+    "description": "Simple and lightweight SSO backend for reverse proxies",
     "type": "project",
     "require": {
         "monolog/monolog": "^1.23",
@@ -11,12 +11,12 @@
         "firebase/php-jwt": "^5.0"
     },
     "autoload": {
-        "psr-4": {"Sso\\": "src/"}
+        "psr-4": {"Guard\\": "src/"}
     },
     "authors": [
         {
             "name": "Laurent Morel",
-            "email": "contact@lmorel3.fr"
+            "email": "hello@lmorel3.fr"
         }
     ]
 }

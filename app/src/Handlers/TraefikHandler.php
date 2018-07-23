@@ -1,11 +1,11 @@
 <?php
 
-namespace Sso\Handlers;
+namespace Guard\Handlers;
 
 /**
  * Class TraefikHandler
  *
- * @package Sso\Handlers
+ * @package Guard\Handlers
  * @author Laurent Morel
  */
 class TraefikHandler implements IHandler

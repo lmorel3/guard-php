@@ -1,11 +1,11 @@
 <?php
 
-namespace Sso\Handlers;
+namespace Guard\Handlers;
 
 /**
  * Interface IHandler
  *
- * @package Sso\Handlers
+ * @package Guard\Handlers
  * @author Laurent Morel
  */
 interface IHandler

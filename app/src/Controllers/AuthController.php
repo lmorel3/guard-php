@@ -1,17 +1,17 @@
 <?php
 
-namespace Sso\Controllers;
+namespace Guard\Controllers;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Http\Response;
-use Sso\Log;
-use Sso\Models\SsoRequest;
-use Sso\Models\User;
+use Guard\Log;
+use Guard\Models\SsoRequest;
+use Guard\Models\User;
 
 /**
  * Class AuthController
  *
- * @package Sso\Controllers
+ * @package Guard\Controllers
  * @author Laurent Morel
  */
 class AuthController
@@ -46,7 +46,7 @@ class AuthController
         // Not logged : redirects to login page
         if(!User::isLogged($request)) {
             return $ssoReq->updateResponse($response)
-                          ->withRedirect(\Sso\Config::LOGIN_URL);
+                          ->withRedirect(\Guard\Config::LOGIN_URL);
         }
 
         // User is logged => 200

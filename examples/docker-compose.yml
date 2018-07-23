@@ -23,9 +23,11 @@ services:
       - "traefik.port=80"
       - "traefik.frontend.rule=Host:guard.local"
 
-  sso:
+  guard:
     container_name: guard
     build: ..
+    environment:
+      - APP_ENV=dev
     image: lmorel3/guard
     volumes:
       - ./config/database.sqlite:/database.sqlite

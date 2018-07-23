@@ -1,18 +1,19 @@
 <?php
 
-namespace Sso\Controllers;
+namespace Guard\Controllers;
 
 use Dflydev\FigCookies\FigResponseCookies;
+use Guard\Views\View;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Http\Response;
-use Sso\Log;
-use Sso\Models\SsoRequest;
-use Sso\Models\User;
+use Guard\Log;
+use Guard\Models\SsoRequest;
+use Guard\Models\User;
 
 /**
  * Class UsersController
  *
- * @package Sso\Controllers
+ * @package Guard\Controllers
  * @author Laurent Morel
  */
 class UsersController
@@ -48,10 +49,7 @@ class UsersController
         }
 
         // Displays login page
-        $content = file_get_contents('./tpl/login.html');
-        return $ssoReq->updateResponse($response)
-                       ->getBody()->write($content);
-
+        return View::render($ssoReq->updateResponse($response), 'login');
     }
 
     /**
@@ -81,7 +79,7 @@ class UsersController
 
         // In case of bad credentials, user is redirected to login page
         $redirectUrl = FigResponseCookies::get($response, User::TOKEN_KEY, '')->getValue() == ''
-            ? \Sso\Config::LOGIN_URL
+            ? \Guard\Config::LOGIN_URL
             : $ssoReq->getRequestUrl();
 
         return $ssoReq->updateResponse($response)

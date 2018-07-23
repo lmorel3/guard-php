@@ -1,13 +1,13 @@
 <?php
 
-namespace Sso\Models;
+namespace Guard\Models;
 
 use Medoo\Medoo;
 
 /**
  * Class Db
  *
- * @package Sso\Models
+ * @package Guard\Models
  * @author Laurent Morel
  */
 class Db

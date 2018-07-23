@@ -16,7 +16,7 @@ Currently supported reverse proxies:
 - _Coming soon_
 
 ## Getting started
-Guard is not published on DockerHub yet but you can have a try using the example.
+You can have a try using the example.
 
 1. First, edit _/etc/hosts_ and add the following lines:
 ```
@@ -24,9 +24,8 @@ Guard is not published on DockerHub yet but you can have a try using the example
 127.0.0.1       auth.guard.local
 ```
 
-2. Then, simply go to `examples` folder and run `docker-compose up --build` \
-NB: `--build` is used to rebuild Guard image.
+2. Then, simply go to `examples` folder and run `docker-compose up` 
 
 3. Open a browser and navigate to `http://guard.local`: you should be redirected to `https://auth.guard.local`.
 
-4. Use the default credentials `user`/`password` so that you are redirected to the app. You're now logged in.
+4. Use the default credentials `user`/`password` so that you are redirected to the app. You're now logged in!

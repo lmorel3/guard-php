@@ -1,20 +1,20 @@
 <?php
 
-namespace Sso\Models;
+namespace Guard\Models;
 
 use Dflydev\FigCookies\FigRequestCookies;
 use Dflydev\FigCookies\FigResponseCookies;
 use Dflydev\FigCookies\SetCookie;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Http\Response;
-use Sso\Config;
-use Sso\Handlers\TraefikHandler;
-use Sso\Log;
+use Guard\Config;
+use Guard\Handlers\TraefikHandler;
+use Guard\Log;
 
 /**
  * Class SsoRequest
  *
- * @package Sso\Models
+ * @package Guard\Models
  * @author Laurent Morel
  */
 class SsoRequest

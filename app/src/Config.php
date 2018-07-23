@@ -1,11 +1,11 @@
 <?php
 
-namespace Sso;
+namespace Guard;
 
 /**
  * Class Config
  *
- * @package Sso
+ * @package Guard
  * @author Laurent Morel
  */
 class Config

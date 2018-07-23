@@ -1,6 +1,6 @@
 <?php
 
-namespace Sso;
+namespace Guard;
 
 
 use Exception;
@@ -11,7 +11,7 @@ use Monolog\Logger;
  * Class Log
  * Wraps a Monolog\Logger with a singleton
  *
- * @package Sso
+ * @package Guard
  * @author Laurent Morel
  */
 class Log

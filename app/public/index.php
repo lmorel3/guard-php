@@ -5,26 +5,26 @@
  * @author Laurent Morel
  */
 
-use Sso\Log;
+use Guard\Log;
 
-require __DIR__ . '/vendor/autoload.php';
+require '../vendor/autoload.php';
 
 $app = new Slim\App();
 
 /**
  * Handles proxy requests
  */
-$app->get('/auth', 'Sso\Controllers\AuthController::handle');
+$app->get('/auth', 'Guard\Controllers\AuthController::handle');
 
 /**
  * Handles login page display
  */
-$app->get('/login', 'Sso\Controllers\UsersController::showLogin');
+$app->get('/login', 'Guard\Controllers\UsersController::showLogin');
 
 /**
  * Handles login attempts
  */
-$app->post('/login', 'Sso\Controllers\UsersController::login');
+$app->post('/login', 'Guard\Controllers\UsersController::login');
 
 /**
  * Runs the application

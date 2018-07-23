@@ -1,6 +1,6 @@
 <?php
 
-namespace Sso\Models;
+namespace Guard\Models;
 
 use Dflydev\FigCookies\FigRequestCookies;
 use Dflydev\FigCookies\FigResponseCookies;
@@ -8,13 +8,13 @@ use Dflydev\FigCookies\SetCookie;
 use Firebase\JWT\JWT;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Http\Response;
-use Sso\Config;
-use Sso\Log;
+use Guard\Config;
+use Guard\Log;
 
 /**
  * Class User
  *
- * @package Sso\Models
+ * @package Guard\Models
  * @author Laurent Morel
  */
 class User
@@ -55,9 +55,11 @@ class User
             return $response;
         }
 
-        if(self::checkCredentials($body['username'], $body['password'])) {
+        $users = self::fetchUser($body['username'], $body['password']);
+        if(sizeof($users) > 0) {
+            $user = $users[0];
 
-            $token = self::generateToken($body['username']);
+            $token = self::generateToken($user);
             $response = FigResponseCookies::expire($response, 'from_url');
 
             $response = FigResponseCookies::set($response, SetCookie::create(self::TOKEN_KEY)
@@ -75,12 +77,12 @@ class User
      *
      * @param string $username
      * @param string $password
-     * @return bool
+     * @return array
      */
-    private static function checkCredentials(string $username, string $password): bool {
+    private static function fetchUser(string $username, string $password): array {
 
         $data = Db::get()->select('users', [
-            'rowid'
+            'rowid', 'username', 'role'
         ], [
             'username' => $username,
             'password' => sha1($password)
@@ -88,19 +90,20 @@ class User
 
         Log::debug('Found user', $data);
 
-        return sizeof($data) > 0;
+        return $data;
 
     }
 
     /**
      * Generates a token for a given user
      *
-     * @param string $username
+     * @param string $user
      * @return string
      */
-    private static function generateToken(string $username) {
+    private static function generateToken(array $user) {
         $token = array(
-            'username'      => $username,
+            'username'      => $user['username'],
+            'role'          => $user['role'],
             'created_at'    => new \DateTime()
         );
 

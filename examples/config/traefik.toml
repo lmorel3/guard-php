@@ -5,7 +5,7 @@ logLevel = "DEBUG"
   [entryPoints.http]
   address = ":80"
     [entryPoints.http.auth.forward]
-    address = "http://sso/auth"
+    address = "http://guard/auth"
 
 [docker]
 endpoint = "unix:///var/run/docker.sock"
