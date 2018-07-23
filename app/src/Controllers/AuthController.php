@@ -2,6 +2,7 @@
 
 namespace Guard\Controllers;
 
+use Guard\Config;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Http\Response;
 use Guard\Log;
@@ -45,8 +46,10 @@ class AuthController
 
         // Not logged : redirects to login page
         if(!User::isLogged($request)) {
+            $loginUrl = Config::getGuardUrl() . '/login';
+
             return $ssoReq->updateResponse($response)
-                          ->withRedirect(\Guard\Config::LOGIN_URL);
+                          ->withRedirect($loginUrl);
         }
 
         // User is logged => 200

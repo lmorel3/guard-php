@@ -2,6 +2,8 @@
 
 namespace Guard;
 
+use Symfony\Component\Yaml\Yaml;
+
 /**
  * Class Config
  *
@@ -11,31 +13,109 @@ namespace Guard;
 class Config
 {
 
-    /**
-     * Auth domain's url
-     * e.g. 'auth.guard.local'
-     */
-    const AUTH_URL  = 'auth.guard.local';
+    private static $instance = null;
 
     /**
-     * Domain (without protocol
-     * e.g. 'guard.local'
+     * Return (or create) a singleton of Config
+     * @return Config
      */
-    const DOMAIN    = 'guard.local';
+    public static function getInstance(): Config {
+        if(self::$instance === null) {
+            self::$instance = new Config();
+        }
+
+        return self::$instance;
+    }
 
     /**
-     * Private key used to generate and verify JWT tokens
+     * Get config value
      *
-     * NB: Use a STRONG key and keep it secured
+     * @param string $key
+     * @param string $rootKey
+     * @return mixed
      */
-    const JWT_KEY   = 'mAcJ)hqCB93aL5sx<+#k';
+    public static function get(string $key, string $rootKey = 'app') {
+        return Config::getInstance()->getValue($key, $rootKey);
+    }
 
     /**
-     * Url where users are redirected to login
-     * e.g. 'http://auth.guard.local/login'
+     * Return app url with the right protocol
      *
-     * NB: Should contain `AUTH_URL`, otherwise it'll generate an infinite loop
+     * @return string
      */
-    const LOGIN_URL = 'http://auth.guard.local/login';
+    public static function getGuardUrl() {
+        $useSsl = (bool) Config::getInstance()->get('useSsl');
+        $authUrl = Config::getInstance()->get('authUrl');
+
+        $protocol = ($useSsl) ? 'https' : 'http';
+
+        return "$protocol://$authUrl";
+    }
+
+    //////////
+
+    /**
+     * Contains configuration loaded from config file
+     * @var array
+     */
+    private $config = [];
+
+    /**
+     * Required keys
+     * @var array
+     */
+    private static $keys = [
+        'app' => [
+            'authUrl',
+            'domain',
+            'useSsl',
+            'jwtKey'
+        ]
+    ];
+
+    /**
+     * Config constructor.
+     *
+     * @throws \RuntimeException
+     */
+    public function __construct()
+    {
+        $this->config = Yaml::parseFile('../config/config.yaml');
+        $this->checkConfig();
+    }
+
+    /**
+     * Get config value
+     * @param string $key
+     * @param string $rootKey
+     * @return mixed
+     */
+    public function getValue(string $key, string $rootKey) {
+        return $this->config[$rootKey][$key];
+    }
+
+    /**
+     * Check if required config keys are available
+     *
+     * @throws \RuntimeException
+     */
+    private function checkConfig() {
+
+        foreach (self::$keys as $k => $subKeys) {
+
+            if(!isset($this->config[$k]))
+            {
+                throw new \RuntimeException('Missing root key : ' . $k);
+            }
+
+            foreach ($subKeys as $s) {
+                if(!isset($this->config[$k][$s]))
+                {
+                    throw new \RuntimeException('Missing sub key : ' . $k . '.' . $s);
+                }
+            }
+        }
+
+    }
 
 }

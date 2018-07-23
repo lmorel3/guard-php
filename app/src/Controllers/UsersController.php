@@ -3,6 +3,7 @@
 namespace Guard\Controllers;
 
 use Dflydev\FigCookies\FigResponseCookies;
+use Guard\Config;
 use Guard\Views\View;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Http\Response;
@@ -79,7 +80,7 @@ class UsersController
 
         // In case of bad credentials, user is redirected to login page
         $redirectUrl = FigResponseCookies::get($response, User::TOKEN_KEY, '')->getValue() == ''
-            ? \Guard\Config::LOGIN_URL
+            ? Config::getGuardUrl() . '/login'
             : $ssoReq->getRequestUrl();
 
         return $ssoReq->updateResponse($response)
