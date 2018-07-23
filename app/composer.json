@@ -1,5 +1,6 @@
 {
     "name": "lmorel3/sso",
+    "version": "0.1-RC1",
     "description": "Simple and lightweight SSO backend for Traefik",
     "type": "project",
     "require": {
