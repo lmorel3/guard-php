@@ -60,10 +60,14 @@ class User
             $user = $users[0];
 
             $token = self::generateToken($user);
-            $response = FigResponseCookies::expire($response, 'from_url');
-
+            $response = FigResponseCookies::set($response, SetCookie::create('from_url')
+                ->withExpires(strtotime('0'))
+                ->withDomain(Config::get('domain'))
+                ->withPath('/')
+            );
             $response = FigResponseCookies::set($response, SetCookie::create(self::TOKEN_KEY)
                 ->withValue($token)
+                ->withExpires(strtotime('+' . Config::get('cookieDuration') . ' days'))
                 ->withDomain(Config::get('domain'))
                 ->withPath('/')
             );

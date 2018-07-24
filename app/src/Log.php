@@ -48,6 +48,7 @@ class Log
             $level = isset(Logger::getLevels()[$wanted]) ? Logger::getLevels()[$wanted] : Logger::DEBUG;
 
             self::$logger->pushHandler(new StreamHandler(Config::get('file', 'log'), $level));
+            self::$logger->pushHandler(new StreamHandler('php://stderr'), $level);
 
             self::info("Loglevel: $level (wanted: $wanted)");
         } catch (Exception $e) {

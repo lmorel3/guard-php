@@ -69,7 +69,8 @@ class Config
             'authUrl',
             'domain',
             'useSsl',
-            'jwtKey'
+            'jwtKey',
+            'cookieDuration'
         ],
         'log' => [
             'file',
