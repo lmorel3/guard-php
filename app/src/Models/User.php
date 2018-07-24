@@ -60,11 +60,13 @@ class User
             $user = $users[0];
 
             $token = self::generateToken($user);
+
             $response = FigResponseCookies::set($response, SetCookie::create('from_url')
                 ->withExpires(strtotime('0'))
                 ->withDomain(Config::get('domain'))
                 ->withPath('/')
             );
+
             $response = FigResponseCookies::set($response, SetCookie::create(self::TOKEN_KEY)
                 ->withValue($token)
                 ->withExpires(strtotime('+' . Config::get('cookieDuration') . ' days'))
@@ -112,6 +114,25 @@ class User
         );
 
         return JWT::encode($token, Config::get('jwtKey'));
+    }
+
+    /**
+     * Logout a connected user
+     *
+     * @param $response
+     * @return \Psr\Http\Message\ResponseInterface|Response
+     */
+    public static function logout($response)
+    {
+
+        // Invalidate cookie
+        $response = FigResponseCookies::set($response, SetCookie::create(self::TOKEN_KEY)
+            ->withExpires(strtotime('0'))
+            ->withDomain(Config::get('domain'))
+            ->withPath('/')
+        );
+
+        return $response;
     }
 
 }

@@ -87,4 +87,14 @@ class UsersController
                       ->withRedirect($redirectUrl);
     }
 
+    public function logout(ServerRequestInterface $request, Response $response) {
+        $loginUrl = Config::getGuardUrl() . '/login';
+
+        if(User::isLogged($request)) {
+            $response = User::logout($response);
+        }
+
+        return $response->withRedirect($loginUrl);
+    }
+
 }

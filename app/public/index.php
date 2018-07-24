@@ -30,6 +30,11 @@ $app->get('/login', 'Guard\Controllers\UsersController::showLogin');
 $app->post('/login', 'Guard\Controllers\UsersController::login');
 
 /**
+ * Handles logout
+ */
+$app->get('/logout', 'Guard\Controllers\UsersController::logout');
+
+/**
  * Runs the application
  */
 try {
