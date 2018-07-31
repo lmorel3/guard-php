@@ -5,9 +5,24 @@
  * @author Laurent Morel
  */
 
+use Guard\Config;
 use Guard\Log;
 
 require '../vendor/autoload.php';
+
+
+$file =  Config::get('file', 'db');
+
+if(!is_writable($file)) {
+
+    if(!is_writable($file)) {
+        Log::error("Database file '$file' is not writable");
+        Log::error("Owner: " . fileowner($file));
+        Log::error("Current user: " . get_current_user() . " uid:" . getmyuid() . " gid:" . getmygid());
+        die(500);
+    }
+
+}
 
 $app = new Slim\App();
 

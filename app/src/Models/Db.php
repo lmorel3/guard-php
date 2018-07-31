@@ -33,8 +33,6 @@ class Db
 
         $file =  Config::get('file', 'db');
 
-        Log::debug("db : ", [fileowner($file), is_writable($file), get_current_user(), getmyuid(), getmygid()]);
-
         Db::$db = new Medoo([
             'database_type' => 'sqlite',
             'database_file' => $file

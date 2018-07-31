@@ -35,7 +35,7 @@ class UsersController
      * @param $args
      * @return int|\Psr\Http\Message\ResponseInterface|Response
      */
-    public function showLogin(ServerRequestInterface $request, Response $response, $args)
+    public function showLogin(ServerRequestInterface $request, Response $response)
     {
         Log::info('Handling GET /login');
 
@@ -50,7 +50,7 @@ class UsersController
         }
 
         // Displays login page
-        return View::render($ssoReq->updateResponse($response), 'login');
+        return View::render($ssoReq->updateResponse($response), 'login', ['displayError' => false ? 'block' : 'none']);
     }
 
     /**
@@ -61,7 +61,7 @@ class UsersController
      * @param $args
      * @return \Psr\Http\Message\ResponseInterface|Response
      */
-    public function login(ServerRequestInterface $request, Response $response, $args)
+    public function login(ServerRequestInterface $request, Response $response)
     {
         Log::info('Handling POST /login');
 
@@ -78,10 +78,11 @@ class UsersController
         Log::info('Attempt to connect : ' . $parsedBody['username']);
         $response = User::login($parsedBody, $response);
 
-        // In case of bad credentials, user is redirected to login page
-        $redirectUrl = FigResponseCookies::get($response, User::TOKEN_KEY, '')->getValue() == ''
-            ? Config::getGuardUrl() . '/login'
-            : $ssoReq->getRequestUrl();
+        // In case of bad credentials, user must retry login
+        $redirectUrl = FigResponseCookies::get($response, User::TOKEN_KEY, '')->getValue();
+        if($redirectUrl === '') {
+            return View::render($ssoReq->updateResponse($response), 'login', ['displayError' => true ? 'block' : 'none']);
+        }
 
         return $ssoReq->updateResponse($response)
                       ->withRedirect($redirectUrl);
@@ -113,7 +114,7 @@ class UsersController
      * @return int|\Psr\Http\Message\ResponseInterface|Response
      * @throws \Exception
      */
-    public function password(ServerRequestInterface $request, Response $response, $args)
+    public function password(ServerRequestInterface $request, Response $response)
     {
         $loginUrl = Config::getGuardUrl() . '/login';
 

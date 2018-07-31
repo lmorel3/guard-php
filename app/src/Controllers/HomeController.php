@@ -27,7 +27,7 @@ class HomeController
      * @return int|\Psr\Http\Message\ResponseInterface|Response
      * @throws \Exception
      */
-    public function index(ServerRequestInterface $request, Response $response, $args)
+    public function index(ServerRequestInterface $request, Response $response)
     {
         $loginUrl = Config::getGuardUrl() . '/login';
 

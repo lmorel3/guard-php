@@ -16,6 +16,9 @@ RUN apk add --no-cache php7-pdo php7-sqlite3 php7-pdo_sqlite
 WORKDIR /var/www/
 COPY app/ /var/www/
 
-COPY bootstrap.sh /
-CMD ["sh", "/bootstrap.sh"]
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+# Install PHP dependencies
+RUN if [ "$APP_ENV" != "dev" ]; then \
+        cd /var/www \
+        php bin/composer.phar install \
+        ; \
+    fi
