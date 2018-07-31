@@ -2,6 +2,8 @@
 
 namespace Guard\Models;
 
+use Guard\Config;
+use Guard\Log;
 use Medoo\Medoo;
 
 /**
@@ -29,9 +31,11 @@ class Db
             return Db::$db;
         }
 
+        $file =  Config::get('file', 'db');
+
         Db::$db = new Medoo([
             'database_type' => 'sqlite',
-            'database_file' => '/database.sqlite'
+            'database_file' => $file
         ]);
 
         return Db::$db;

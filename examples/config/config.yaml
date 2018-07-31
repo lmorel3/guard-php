@@ -13,10 +13,17 @@ app:
   # - Use a STRONG key and keep it secured
   jwtKey: 'azerty'
 
+  # In days
+  cookieDuration: 1
+
 log:
 
   # Log file
   file: '/var/log/guard/guard.log'
 
   # Log level (DEBUG, INFO, WARNING)
-  level: 'INFO'
+  level: 'DEBUG'
+
+db:
+
+  file: '/config/database.sqlite'

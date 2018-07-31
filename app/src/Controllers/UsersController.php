@@ -35,7 +35,7 @@ class UsersController
      * @param $args
      * @return int|\Psr\Http\Message\ResponseInterface|Response
      */
-    public function showLogin(ServerRequestInterface $request, Response $response, $args)
+    public function showLogin(ServerRequestInterface $request, Response $response)
     {
         Log::info('Handling GET /login');
 
@@ -50,7 +50,7 @@ class UsersController
         }
 
         // Displays login page
-        return View::render($ssoReq->updateResponse($response), 'login');
+        return View::render($ssoReq->updateResponse($response), 'login', ['displayError' => false ? 'block' : 'none']);
     }
 
     /**
@@ -61,7 +61,7 @@ class UsersController
      * @param $args
      * @return \Psr\Http\Message\ResponseInterface|Response
      */
-    public function login(ServerRequestInterface $request, Response $response, $args)
+    public function login(ServerRequestInterface $request, Response $response)
     {
         Log::info('Handling POST /login');
 
@@ -78,13 +78,74 @@ class UsersController
         Log::info('Attempt to connect : ' . $parsedBody['username']);
         $response = User::login($parsedBody, $response);
 
-        // In case of bad credentials, user is redirected to login page
-        $redirectUrl = FigResponseCookies::get($response, User::TOKEN_KEY, '')->getValue() == ''
-            ? Config::getGuardUrl() . '/login'
-            : $ssoReq->getRequestUrl();
+        // In case of bad credentials, user must retry login
+        $redirectUrl = FigResponseCookies::get($response, User::TOKEN_KEY, '')->getValue();
+        if($redirectUrl === '') {
+            return View::render($ssoReq->updateResponse($response), 'login', ['displayError' => true ? 'block' : 'none']);
+        }
 
         return $ssoReq->updateResponse($response)
                       ->withRedirect($redirectUrl);
+    }
+
+    /**
+     * Logs out a user
+     *
+     * @param ServerRequestInterface $request
+     * @param Response $response
+     * @return \Psr\Http\Message\ResponseInterface|Response
+     */
+    public function logout(ServerRequestInterface $request, Response $response) {
+        $loginUrl = Config::getGuardUrl() . '/login';
+
+        if(User::isLogged($request)) {
+            $response = User::logout($response);
+        }
+
+        return $response->withRedirect($loginUrl);
+    }
+
+    /**
+     * Displays the password editing page
+     *
+     * @param ServerRequestInterface $request
+     * @param Response $response
+     * @param $args
+     * @return int|\Psr\Http\Message\ResponseInterface|Response
+     * @throws \Exception
+     */
+    public function password(ServerRequestInterface $request, Response $response)
+    {
+        $loginUrl = Config::getGuardUrl() . '/login';
+
+        if(!User::isLogged($request)) {
+            return $response->withRedirect($loginUrl);
+        }
+
+        return View::render($response, 'edit_password', ['displaySuccess' => 'none']);
+    }
+
+    /**
+     * Handle password editing
+     *
+     * @param ServerRequestInterface $request
+     * @param Response $response
+     * @param $args
+     * @return int|\Psr\Http\Message\ResponseInterface|Response
+     * @throws \Exception
+     */
+    public function editPassword(ServerRequestInterface $request, Response $response, $args)
+    {
+        $loginUrl = Config::getGuardUrl() . '/login';
+
+        if(!User::isLogged($request)) {
+            return $response->withRedirect($loginUrl);
+        }
+
+        $parsedBody = $request->getParsedBody();
+        $success = User::editPassword($request, $parsedBody);
+
+        return View::render($response, 'edit_password', ['displaySuccess' => $success ? 'block' : 'none']);
     }
 
 }

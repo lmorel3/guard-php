@@ -13,6 +13,9 @@ app:
   # - Use a STRONG key and keep it secured
   jwtKey: 'azerty'
 
+  # In days
+  cookieDuration: 2
+
 log:
 
   # Log file
@@ -20,3 +23,7 @@ log:
 
   # Log level (DEBUG, INFO, WARNING)
   level: 'DEBUG'
+
+db:
+
+  file: '/config/database.sqlite'

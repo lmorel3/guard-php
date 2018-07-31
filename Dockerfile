@@ -1,8 +1,13 @@
 FROM trafex/alpine-nginx-php7
 MAINTAINER Laurent Morel <hello@lmorel3.fr>
 
+VOLUME ["/var/log/guard", "/config"]
+
 # Clean application
 RUN rm -rf /var/www/*
+
+# Nginx conf
+RUN sed -i 's|root /var/www/html;|root /var/www/public;|g' /etc/nginx/nginx.conf
 
 # Adds SQLite support
 RUN apk add --no-cache php7-pdo php7-sqlite3 php7-pdo_sqlite
@@ -11,14 +16,9 @@ RUN apk add --no-cache php7-pdo php7-sqlite3 php7-pdo_sqlite
 WORKDIR /var/www/
 COPY app/ /var/www/
 
-RUN sed -i 's|root /var/www/html;|root /var/www/public;|g' /etc/nginx/nginx.conf
-
 # Install PHP dependencies
 RUN if [ "$APP_ENV" != "dev" ]; then \
-        cd /var/www/html \
+        cd /var/www \
         php bin/composer.phar install \
         ; \
     fi
-
-RUN mkdir -p /var/log/guard && \
-    chown -R nobody:nobody /var/log/guard

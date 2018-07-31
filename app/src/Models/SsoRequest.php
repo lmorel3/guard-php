@@ -96,6 +96,7 @@ class SsoRequest
         if($this->setCookie) {
             return FigResponseCookies::set($response, SetCookie::create('from_url')
                 ->withValue($this->requestUrl)
+                ->withExpires(strtotime('+' . Config::get('cookieDuration') . ' days'))
                 ->withDomain(Config::get('domain'))
                 ->withPath('/')
             );

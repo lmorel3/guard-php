@@ -32,7 +32,7 @@ class AuthController
      * @param $args
      * @return \Psr\Http\Message\ResponseInterface|Response
      */
-    public function handle(ServerRequestInterface $request, Response $response, $args)
+    public function handle(ServerRequestInterface $request, Response $response)
     {
         Log::info('Handling /auth');
 

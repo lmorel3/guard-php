@@ -29,7 +29,6 @@ class TraefikHandler implements IHandler
     public function getRedirectUrl(): string
     {
         $redirectUrl = '';
-        //$this->ip = $_SERVER["HTTP_X_FORWARDED_FOR"];
 
         if(isset($_SERVER["HTTP_X_FORWARDED_PROTO"])) {
             $uri = isset($_SERVER['HTTP_X_FORWARDED_URI']) ? $_SERVER['HTTP_X_FORWARDED_URI'] : '';
