@@ -22,4 +22,8 @@ log:
   file: '/var/log/guard/guard.log'
 
   # Log level (DEBUG, INFO, WARNING)
-  level: 'INFO'
+  level: 'DEBUG'
+
+db:
+
+  file: '/config/database.sqlite'

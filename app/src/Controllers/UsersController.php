@@ -87,6 +87,13 @@ class UsersController
                       ->withRedirect($redirectUrl);
     }
 
+    /**
+     * Logs out a user
+     *
+     * @param ServerRequestInterface $request
+     * @param Response $response
+     * @return \Psr\Http\Message\ResponseInterface|Response
+     */
     public function logout(ServerRequestInterface $request, Response $response) {
         $loginUrl = Config::getGuardUrl() . '/login';
 
@@ -95,6 +102,49 @@ class UsersController
         }
 
         return $response->withRedirect($loginUrl);
+    }
+
+    /**
+     * Displays the password editing page
+     *
+     * @param ServerRequestInterface $request
+     * @param Response $response
+     * @param $args
+     * @return int|\Psr\Http\Message\ResponseInterface|Response
+     * @throws \Exception
+     */
+    public function password(ServerRequestInterface $request, Response $response, $args)
+    {
+        $loginUrl = Config::getGuardUrl() . '/login';
+
+        if(!User::isLogged($request)) {
+            return $response->withRedirect($loginUrl);
+        }
+
+        return View::render($response, 'edit_password', ['displaySuccess' => 'none']);
+    }
+
+    /**
+     * Handle password editing
+     *
+     * @param ServerRequestInterface $request
+     * @param Response $response
+     * @param $args
+     * @return int|\Psr\Http\Message\ResponseInterface|Response
+     * @throws \Exception
+     */
+    public function editPassword(ServerRequestInterface $request, Response $response, $args)
+    {
+        $loginUrl = Config::getGuardUrl() . '/login';
+
+        if(!User::isLogged($request)) {
+            return $response->withRedirect($loginUrl);
+        }
+
+        $parsedBody = $request->getParsedBody();
+        $success = User::editPassword($request, $parsedBody);
+
+        return View::render($response, 'edit_password', ['displaySuccess' => $success ? 'block' : 'none']);
     }
 
 }

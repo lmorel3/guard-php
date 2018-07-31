@@ -9,9 +9,6 @@ use Guard\Log;
 
 require '../vendor/autoload.php';
 
-error_log(print_r(shell_exec('whoami'), true));
-error_log(fileowner('/var/log/guard'));
-
 $app = new Slim\App();
 
 /**
@@ -20,19 +17,28 @@ $app = new Slim\App();
 $app->get('/auth', 'Guard\Controllers\AuthController::handle');
 
 /**
- * Handles login page display
+ * Handles login
  */
 $app->get('/login', 'Guard\Controllers\UsersController::showLogin');
-
-/**
- * Handles login attempts
- */
 $app->post('/login', 'Guard\Controllers\UsersController::login');
 
 /**
  * Handles logout
  */
 $app->get('/logout', 'Guard\Controllers\UsersController::logout');
+
+/**
+ * Displays homepage
+ */
+$app->get('/', 'Guard\Controllers\HomeController::index');
+
+
+/**
+ * Handles password edition
+ */
+$app->get('/password', 'Guard\Controllers\UsersController::password');
+$app->post('/password', 'Guard\Controllers\UsersController::editPassword');
+
 
 /**
  * Runs the application

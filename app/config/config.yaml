@@ -23,3 +23,7 @@ log:
 
   # Log level (DEBUG, INFO, WARNING)
   level: 'DEBUG'
+
+db:
+
+  file: '/config/database.sqlite'

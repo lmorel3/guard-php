@@ -75,6 +75,9 @@ class Config
         'log' => [
             'file',
             'level'
+        ],
+        'db' => [
+            'file'
         ]
     ];
 
