@@ -73,11 +73,7 @@ class Config
             'cookieDuration'
         ],
         'log' => [
-            'file',
             'level'
-        ],
-        'db' => [
-            'file'
         ]
     ];
 
@@ -88,10 +84,7 @@ class Config
      */
     public function __construct()
     {
-        $env = getenv('CONF_FILE');
-        $file = $env ? $env : '../config.yaml';
-
-        $this->config = Yaml::parseFile($file);
+        $this->config = Yaml::parseFile('/config/config.yaml');
         $this->checkConfig();
     }
 

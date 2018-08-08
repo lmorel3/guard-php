@@ -48,9 +48,9 @@ class User
      *
      * @param array $body
      * @param Response $response
-     * @return \Psr\Http\Message\ResponseInterface|Response
+     * @return
      */
-    public static function login(array $body, Response $response) {
+    public static function login(array $body, Response &$response) {
         if(!isset($body['username']) || !isset($body['password'])) {
             return $response;
         }
@@ -60,21 +60,17 @@ class User
         if($user) {
             $token = self::generateToken($user);
 
-            $response = FigResponseCookies::set($response, SetCookie::create('from_url')
-                ->withExpires(strtotime('0'))
-                ->withDomain(Config::get('domain'))
-                ->withPath('/')
-            );
-
             $response = FigResponseCookies::set($response, SetCookie::create(self::TOKEN_KEY)
                 ->withValue($token)
                 ->withExpires(strtotime('+' . Config::get('cookieDuration') . ' days'))
                 ->withDomain(Config::get('domain'))
                 ->withPath('/')
             );
+
+            return true;
         }
 
-        return $response;
+        return false;
     }
 
     /**

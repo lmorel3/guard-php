@@ -11,16 +11,14 @@ use Guard\Log;
 require '../vendor/autoload.php';
 
 
-$file =  Config::get('file', 'db');
-
+$file = '/config/database.db';
 if(!is_writable($file)) {
 
-    if(!is_writable($file)) {
-        Log::error("Database file '$file' is not writable");
-        Log::error("Owner: " . fileowner($file));
-        Log::error("Current user: " . get_current_user() . " uid:" . getmyuid() . " gid:" . getmygid());
-        die(500);
-    }
+    Log::error("Database file '$file' is not writable");
+    Log::error("Owner: " . fileowner($file), [ substr(sprintf('%o', fileperms($file)), -4)]);
+    Log::error("Current user: " . get_current_user() . " uid:" . getmyuid() . " gid:" . getmygid());
+   // header('HTTP/1.0 403 Forbidden');
+   // exit;
 
 }
 

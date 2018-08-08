@@ -31,11 +31,9 @@ class Db
             return Db::$db;
         }
 
-        $file =  Config::get('file', 'db');
-
         Db::$db = new Medoo([
             'database_type' => 'sqlite',
-            'database_file' => $file
+            'database_file' => '/config/database.db'
         ]);
 
         return Db::$db;

@@ -46,16 +46,12 @@ class Log
 
             $wanted = Config::get('level', 'log');
             $level = isset(Logger::getLevels()[$wanted]) ? Logger::getLevels()[$wanted] : Logger::DEBUG;
-            self::info("Loglevel: $level (wanted: $wanted)");
+            self::info("Log level: $level");
 
-            self::$logger->pushHandler(new StreamHandler(Config::get('file', 'log'), $level));
-
-            if(getenv('APP_ENV') === 'DEV') {
-                self::$logger->pushHandler(new StreamHandler('php://stderr', $level));
-            }
+	        self::$logger->pushHandler(new \Monolog\Handler\ErrorLogHandler());
 
         } catch (Exception $e) {
-            error_log("Unable to create logger");
+            error_log("Unable to create logger " . $e->getMessage());
             die();
         }
 

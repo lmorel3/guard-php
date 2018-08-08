@@ -25,6 +25,8 @@ class SsoRequest
 
     private $setCookie = false;
 
+    const COOKIE_REDIRECT = 'from_url';
+
     /**
      * URL used for redirecting user after login
      * @var string
@@ -34,7 +36,7 @@ class SsoRequest
     public function __construct(ServerRequestInterface $request, bool $setCookie = false)
     {
 
-        $this->requestUrl = FigRequestCookies::get($request, 'from_url', '')->getValue();
+        $this->requestUrl = FigRequestCookies::get($request, self::COOKIE_REDIRECT, '')->getValue();
         $handler = new TraefikHandler($request); // TODO: Generify
 
         // First request
@@ -94,7 +96,7 @@ class SsoRequest
     public function updateResponse(Response $response) {
 
         if($this->setCookie) {
-            return FigResponseCookies::set($response, SetCookie::create('from_url')
+            return FigResponseCookies::set($response, SetCookie::create(self::COOKIE_REDIRECT)
                 ->withValue($this->requestUrl)
                 ->withExpires(strtotime('+' . Config::get('cookieDuration') . ' days'))
                 ->withDomain(Config::get('domain'))

@@ -1,24 +1,31 @@
-FROM trafex/alpine-nginx-php7
+FROM phpearth/php:7.1-nginx
+
 MAINTAINER Laurent Morel <hello@lmorel3.fr>
 
-VOLUME ["/var/log/guard", "/config"]
+RUN apk add -U \
+    php7.1-pdo \
+    php7.1-pdo_sqlite \
+    sqlite
 
-# Clean application
-RUN rm -rf /var/www/*
+#RUN rm -rf /var/cache/apk/* \
+#    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION}
 
-# Nginx conf
-RUN sed -i 's|root /var/www/html;|root /var/www/public;|g' /etc/nginx/nginx.conf
+RUN sed -i -e 's|root /var/www/html;|root /var/www/html/public;|g' \
+	/etc/nginx/conf.d/default.conf
+		
+RUN sed -i -e "s/;listen.mode = 0660/listen.mode = 0666/g" \
+	/etc/php/7.1/php-fpm.d/www.conf
 
-# Adds SQLite support
-RUN apk add --no-cache php7-pdo php7-sqlite3 php7-pdo_sqlite
+RUN rm -rf /var/www/html/*
 
-# Copy application files
-WORKDIR /var/www/
-COPY app/ /var/www/
 
-# Install PHP dependencies
-RUN if [ "$APP_ENV" != "dev" ]; then \
-        cd /var/www \
-        php bin/composer.phar install \
-        ; \
-    fi
+VOLUME /var/log/guard /config
+
+COPY ./docker /docker
+COPY ./app/config/config.yaml /config/
+COPY ./app /var/www/html
+
+WORKDIR /var/www/html
+RUN php bin/composer.phar install
+
+ENTRYPOINT ["sh", "/docker/entrypoint.sh"]

@@ -3,6 +3,7 @@
 namespace Guard\Controllers;
 
 use Dflydev\FigCookies\FigResponseCookies;
+use Dflydev\FigCookies\SetCookie;
 use Guard\Config;
 use Guard\Views\View;
 use Psr\Http\Message\ServerRequestInterface;
@@ -76,13 +77,13 @@ class UsersController
         // Tries to connect user
         $parsedBody = $request->getParsedBody();
         Log::info('Attempt to connect : ' . $parsedBody['username']);
-        $response = User::login($parsedBody, $response);
 
-        // In case of bad credentials, user must retry login
-        $redirectUrl = FigResponseCookies::get($response, User::TOKEN_KEY, '')->getValue();
-        if($redirectUrl === '') {
+        $isOk = User::login($parsedBody, $response);
+        if(!$isOk) {
             return View::render($ssoReq->updateResponse($response), 'login', ['displayError' => true ? 'block' : 'none']);
         }
+
+        $redirectUrl = $ssoReq->getRequestUrl();
 
         return $ssoReq->updateResponse($response)
                       ->withRedirect($redirectUrl);

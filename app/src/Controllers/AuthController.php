@@ -34,7 +34,7 @@ class AuthController
      */
     public function handle(ServerRequestInterface $request, Response $response)
     {
-        Log::info('Handling /auth');
+        Log::info('Handling /auth', [$request]);
 
         $ssoReq = new SsoRequest($request, true);
         Log::debug($ssoReq);

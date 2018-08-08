@@ -11,7 +11,7 @@ services:
       - '8080:8080'
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock #So that Traefik can listen to the Docker events
-      - ./config/traefik.toml:/etc/traefik/traefik.toml
+      - ./traefik.toml:/etc/traefik/traefik.toml
 
   whoami:
     container_name: whoami
@@ -27,12 +27,11 @@ services:
     container_name: guard
     build: ..
     environment:
-      - APP_ENV=dev
-      - CONF_FILE=/config/config.yaml
+      - PUID=1000
+      - PGID=1000
     image: lmorel3/guard
     volumes:
       - ./config:/config
-      - ./logs/guard:/var/log/guard
     ports:
       - '8081:80'
     labels:
